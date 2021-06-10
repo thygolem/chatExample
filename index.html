@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>SIMOYEAH</title>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <button>DALE</button>
+    <script>
+        const options = {
+            connectTimeot: 5000,
+
+            //Auth
+            clientId: 'CDN_CLIENT',
+            //username: 'indoor_client',
+            //password: 'Realtime_1',
+
+            keepalive: 60,
+            clean: true,
+
+        }
+
+        //websocket connect url
+        const WebSocket_URL = 'ws://localhost:8083/mqtt'
+
+        const client = mqtt.connect(WebSocket_URL, options)
+        
+
+        client.on('connect', () => {
+            console.log('connect success');
+
+            client.subscribe('testtopic2', function (err) {
+                if (!err) {
+                    console.log('SUSCRITO!!')
+                }else{
+                    console.log("NO SUSCRITO")
+                }
+            })
+
+            //client.publish('testtopic', 'uno');
+            //client.publish('testtopic', 'uno', {'qos':1, 'retain':true});
+
+        });
+        
+        client.on('message', function (topic, message){
+            console.log("El topic es: " + topic + " and the message is " + message.toString());
+            //var msg = message.toString();
+        })
+
+        client.on('reconnect', (error) => {
+            console.log('reconnecting :(', error)
+        })
+
+        client.on('error', (error) => {
+            console.log('Connect Error:', error)
+        })
+
+
+
+
+
+
+    </script>
+</body>
+</html>
