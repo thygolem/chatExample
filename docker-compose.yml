@@ -1,13 +1,35 @@
 version: "3.8"
-services:
 
+volumes:
+  vol-emqx-data:
+    name: foo-emqx-data
+  vol-emqx-etc:
+    name: foo-emqx-etc
+  vol-emqx-log:
+    name: foo-emqx-log
+
+services:
+ 
   emqx:
     container_name: emqx
     image: emqx/emqx:4.2.3
     restart: always
     ports:
-      - ${emqxdashport}:18083
+      - 18083:18083
       - 8083:8083
-    environment:
-      #listener.tcp.external.max_connections
+
+    volumes:
+      - vol-emqx-data:/opt/emqx/data
+      - vol-emqx-etc:/opt/emqx/etc
+      - vol-emqx-log:/opt/emqx/log
+
+    environment: 
+      
+      EMQX_NAME: simo-iot
+      EMQX_HOST: 127.0.0.1
+
+      TZ: "Europe/Madrid"
+
+      EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "12345678" 
+
       EMQX_LISTENER__TCP__EXTERNAL__MAX_CONNECTIONS: 1000
